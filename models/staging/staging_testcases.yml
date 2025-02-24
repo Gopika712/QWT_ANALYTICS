@@ -1,0 +1,47 @@
+version: 2
+models:
+  - name: stg_customers
+    description: "{{doc('customers_desc')}}"
+    columns:
+      - name: customerid
+        description: unique identifier for each customer with customerid
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_products
+    description: "{{doc('products_desc')}}"
+    columns:
+      - name: PRODUCTID
+        description: identify each products uniquely in master products data
+        tests:
+          - unique
+          - not_null      
+
+  - name: stg_employees
+    description: "{{doc('employees_desc')}}"
+    columns:
+      - name: empid
+        description: identify each employees uniquely in master employees data
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_shipments
+    description: "{{doc('shipments_desc')}}"
+    columns:
+      - name: status
+        description: identify valid values for status column
+        tests:
+          - accepted_values:
+              values: ['shipped','returned','ordered','replaced']
+
+  - name: stg_orderdetails
+    description: "{{doc('orderdetails_desc')}}"
+    columns:
+      - name: orderid
+        description: orderid represents each order placed by every customer
+        tests:
+          - relationships:
+              field: orderid
+              to: ref('stg_orders')

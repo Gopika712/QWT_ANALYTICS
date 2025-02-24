@@ -1,0 +1,12 @@
+vars: 
+  v_country: 'USA'
+  "dbt_date:time_zone": "Asia/Kolkata"
+
+on-run-start: "alter session set timezone = 'Asia/Kolkata';"
+on-run-end: "grant select on table qwt_analytics_dev.auditing_dev.auditing_qwt_models to role sysadmin;"
+
+models:
+  pre-hook:
+    - "insert into auditing_dev.auditing_qwt_models(modelname, starttime, endtime, duration) values ('{{this}}', current_timestamp, null, null);"
+  post-hook:
+    - " update auditing_dev.auditing_qwt_models set endtime = current_timestamp, duration = datediff('second', starttime, current_timestamp) where modelname = '{{this}}';"
